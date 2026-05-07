@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-current.dtd">
+<suite name="Mobile Automation Tests" verbose="2" parallel="false" thread-count="1">
+    <test name="Authentication Tests">
+        <classes>
+            <class name="com.mobile.automation.tests.LoginTest"/>
+            <!-- Adicione mais teste classes aqui -->
+        </classes>
+    </test>
+
+    <!-- Adicione mais suites de testes conforme necessário -->
+</suite>
+

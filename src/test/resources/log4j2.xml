@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration packages="org.apache.logging.log4j.core">
+    <Properties>
+        <Property name="log.dir">logs</Property>
+        <Property name="log.pattern">%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%t] %c{1} - %msg%n</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${log.pattern}"/>
+        </Console>
+
+        <!-- File Appender -->
+        <File name="FileAppender" fileName="${log.dir}/automation.log" append="true">
+            <PatternLayout pattern="${log.pattern}"/>
+        </File>
+
+        <!-- Rolling File Appender -->
+        <RollingFile name="RollingFileAppender"
+                     fileName="${log.dir}/automation.log"
+                     filePattern="${log.dir}/automation-%d{yyyy-MM-dd}-%i.log"
+                     append="true">
+            <PatternLayout pattern="${log.pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- Root Logger -->
+        <Root level="info">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="RollingFileAppender"/>
+        </Root>
+
+        <!-- Framework Loggers -->
+        <Logger name="com.mobile.automation" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="RollingFileAppender"/>
+        </Logger>
+
+        <!-- Selenium Logger -->
+        <Logger name="org.openqa.selenium" level="warn"/>
+
+        <!-- Appium Logger -->
+        <Logger name="io.appium" level="warn"/>
+    </Loggers>
+</Configuration>
+

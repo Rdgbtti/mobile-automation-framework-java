@@ -1,0 +1,76 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+*.iws
+*.ipr
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Build
+out/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Test Reports
+allure-results/
+test-output/
+target/surefire-reports/
+target/allure-results/
+
+# Resources
+*.apk
+*.ipa
+*.app
+downloads/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Gradle
+.gradle/
+gradle/
+gradlew
+gradlew.bat
+
+# OS
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Data
+*.db
+*.sqlite
+*.sqlite3
+
+# Misc
+node_modules/
+package-lock.json
+yarn.lock
+
