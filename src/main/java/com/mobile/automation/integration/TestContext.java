@@ -1,23 +1,28 @@
 package com.mobile.automation.integration;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.WebDriver;
 import com.mobile.automation.utils.WaitUtils;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TestContext - Armazena contexto global do teste (Framework)
+ * TestContext - Armazena contexto global do teste (Framework HÍBRIDO - Mobile + Web)
  */
 public class TestContext {
-    private AppiumDriver driver;
+    private AppiumDriver driver;           // Para testes MOBILE
+    private WebDriver webDriver;          // Para testes WEB
     private WaitUtils waitUtils;
     private TestResult currentTestResult;
     private Map<String, Object> contextData;
+    private String testType;              // "mobile" ou "web"
 
     public TestContext() {
         this.contextData = new HashMap<>();
+        this.testType = "mobile"; // Padrão
     }
 
+    // ===== MOBILE METHODS =====
     public AppiumDriver getDriver() {
         return driver;
     }
@@ -26,6 +31,16 @@ public class TestContext {
         this.driver = driver;
     }
 
+    // ===== WEB METHODS =====
+    public WebDriver getWebDriver() {
+        return webDriver;
+    }
+
+    public void setWebDriver(WebDriver webDriver) {
+        this.webDriver = webDriver;
+    }
+
+    // ===== COMMON METHODS =====
     public WaitUtils getWaitUtils() {
         return waitUtils;
     }
@@ -58,6 +73,22 @@ public class TestContext {
         contextData.clear();
     }
 
+    public String getTestType() {
+        return testType;
+    }
+
+    public void setTestType(String testType) {
+        this.testType = testType;
+    }
+
+    public boolean isMobileTest() {
+        return "mobile".equalsIgnoreCase(testType);
+    }
+
+    public boolean isWebTest() {
+        return "web".equalsIgnoreCase(testType);
+    }
+
     public void cleanUp() {
         if (driver != null) {
             try {
@@ -66,7 +97,16 @@ public class TestContext {
                 // Ignored
             }
         }
+        if (webDriver != null) {
+            try {
+                webDriver.quit();
+            } catch (Exception e) {
+                // Ignored
+            }
+        }
         contextData.clear();
     }
 }
+
+
 

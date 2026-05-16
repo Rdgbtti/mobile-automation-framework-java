@@ -1,22 +1,30 @@
 package com.mobile.automation.base;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.WebDriver;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.AfterClass;
 import com.mobile.automation.drivers.DriverFactory;
+import com.mobile.automation.drivers.WebDriverFactory;
 import com.mobile.automation.utils.LoggerUtil;
 import com.mobile.automation.utils.WaitUtils;
+import com.mobile.automation.utils.ConfigReader;
 import com.mobile.automation.integration.TestContext;
 
 /**
- * BaseTest - Classe base para todos os testes (Framework)
- * Gerencia inicialização e finalização do driver Appium
+ * BaseTest - Classe base para testes MÓVEL E WEB (Framework HÍBRIDO)
+ * Gerencia inicialização e finalização de drivers (Appium para mobile, WebDriver para web)
  * Pode ser estendida por projetos de testes externos
  */
 public class BaseTest {
+    // Mobile (Appium)
     protected AppiumDriver driver;
+
+    // Web (Selenium WebDriver)
+    protected WebDriver webDriver;
+
     protected WaitUtils waitUtils;
     protected TestContext testContext;
 
@@ -27,17 +35,35 @@ public class BaseTest {
     public void setUpClass() {
         LoggerUtil.info("========== Iniciando Suite de Testes ==========");
         testContext = new TestContext();
-        // Comentado para não iniciar automaticamente
-        // DriverFactory.startAppiumServer();
     }
 
     /**
-     * Setup antes de cada teste
+     * Setup antes de cada teste - Inicializa driver baseado na plataforma
      */
     @BeforeMethod
     public void setUp() {
         try {
-            LoggerUtil.info("Configurando driver para o teste...");
+            String testType = ConfigReader.getProperty("test.type", "mobile").toLowerCase();
+
+            if ("web".equals(testType)) {
+                setUpWeb();
+            } else if ("mobile".equals(testType)) {
+                setUpMobile();
+            } else {
+                throw new IllegalArgumentException("test.type inválido. Use 'mobile' ou 'web'");
+            }
+        } catch (Exception e) {
+            LoggerUtil.error("Erro ao inicializar driver: " + e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    /**
+     * Setup para testes MÓVEL (Appium)
+     */
+    private void setUpMobile() {
+        try {
+            LoggerUtil.info("Configurando driver MOBILE (Appium)...");
             Object driverObject = DriverFactory.createDriver();
 
             if (driverObject instanceof AppiumDriver) {
@@ -45,12 +71,38 @@ public class BaseTest {
                 waitUtils = new WaitUtils(driver);
                 testContext.setDriver(driver);
                 testContext.setWaitUtils(waitUtils);
-                LoggerUtil.info("Driver inicializado com sucesso");
+                testContext.setTestType("mobile");
+                LoggerUtil.info("Driver MOBILE inicializado com sucesso");
             } else {
                 throw new RuntimeException("Driver não é do tipo AppiumDriver");
             }
         } catch (Exception e) {
-            LoggerUtil.error("Erro ao initializar driver: " + e.getMessage(), e);
+            LoggerUtil.error("Erro ao inicializar driver MOBILE: " + e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    /**
+     * Setup para testes WEB (Selenium)
+     */
+    private void setUpWeb() {
+        try {
+            LoggerUtil.info("Configurando driver WEB (Selenium)...");
+            webDriver = WebDriverFactory.createWebDriver();
+            WebDriverFactory.maximizeWindow(webDriver);
+
+            // Navegar para URL base
+            String baseUrl = ConfigReader.getWebBaseUrl();
+            webDriver.navigate().to(baseUrl);
+            LoggerUtil.info("Navegando para: " + baseUrl);
+
+            waitUtils = new WaitUtils(webDriver);
+            testContext.setWebDriver(webDriver);
+            testContext.setWaitUtils(waitUtils);
+            testContext.setTestType("web");
+            LoggerUtil.info("Driver WEB inicializado com sucesso");
+        } catch (Exception e) {
+            LoggerUtil.error("Erro ao inicializar driver WEB: " + e.getMessage(), e);
             throw e;
         }
     }
@@ -61,9 +113,16 @@ public class BaseTest {
     @AfterMethod
     public void tearDown() {
         try {
+            // Fechar Mobile Driver
             if (driver != null) {
                 driver.quit();
-                LoggerUtil.info("Driver finalizado com sucesso");
+                LoggerUtil.info("Driver MOBILE finalizado com sucesso");
+            }
+
+            // Fechar Web Driver
+            if (webDriver != null) {
+                WebDriverFactory.quitWebDriver(webDriver);
+                LoggerUtil.info("Driver WEB finalizado com sucesso");
             }
         } catch (Exception e) {
             LoggerUtil.error("Erro ao fechar driver: " + e.getMessage(), e);
@@ -88,5 +147,20 @@ public class BaseTest {
     public TestContext getTestContext() {
         return testContext;
     }
+
+    /**
+     * Verifica se é teste mobile
+     */
+    protected boolean isMobileTest() {
+        return driver != null;
+    }
+
+    /**
+     * Verifica se é teste web
+     */
+    protected boolean isWebTest() {
+        return webDriver != null;
+    }
 }
+
 

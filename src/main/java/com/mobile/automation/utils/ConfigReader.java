@@ -50,6 +50,31 @@ public class ConfigReader {
         return getProperty("platform", "Android");
     }
 
+    // WEB CONFIGURATION
+    public static String getBrowser() {
+        return getProperty("browser", "Chrome");
+    }
+
+    public static String getWebBaseUrl() {
+        return getProperty("web.base.url", "http://localhost:3000");
+    }
+
+    public static boolean isHeadlessMode() {
+        return getBooleanProperty("headless.mode");
+    }
+
+    public static boolean isIncognitoMode() {
+        return getBooleanProperty("incognito.mode");
+    }
+
+    public static int getPageLoadTimeout() {
+        return getIntProperty("page.load.timeout");
+    }
+
+    public static int getMaxRetry() {
+        return getIntProperty("max.retry");
+    }
+
     public static String getAppiumServerUrl() {
         return getProperty("appium.server.url", "http://127.0.0.1:4723");
     }
