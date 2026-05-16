@@ -75,6 +75,39 @@ public class ConfigReader {
         return getIntProperty("max.retry");
     }
 
+    // API CONFIGURATION
+    public static String getApiBaseUrl() {
+        return getProperty("api.base.url", "http://localhost:8080/api");
+    }
+
+    public static String getApiVersion() {
+        return getProperty("api.version", "v1");
+    }
+
+    public static boolean isApiAuthRequired() {
+        return getBooleanProperty("api.auth.required");
+    }
+
+    public static String getApiAuthToken() {
+        return getProperty("api.auth.token", "");
+    }
+
+    public static String getApiAuthUsername() {
+        return getProperty("api.auth.username", "");
+    }
+
+    public static String getApiAuthPassword() {
+        return getProperty("api.auth.password", "");
+    }
+
+    public static int getApiTimeout() {
+        return getIntProperty("api.timeout");
+    }
+
+    public static boolean isApiLoggingEnabled() {
+        return getBooleanProperty("api.logging.enabled");
+    }
+
     public static String getAppiumServerUrl() {
         return getProperty("appium.server.url", "http://127.0.0.1:4723");
     }

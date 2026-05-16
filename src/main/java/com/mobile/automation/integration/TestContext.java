@@ -2,20 +2,22 @@ package com.mobile.automation.integration;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebDriver;
+import com.mobile.automation.drivers.RestApiClient;
 import com.mobile.automation.utils.WaitUtils;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TestContext - Armazena contexto global do teste (Framework HÍBRIDO - Mobile + Web)
+ * TestContext - Armazena contexto global do teste (Framework TRIPLE HYBRID - Mobile + Web + API)
  */
 public class TestContext {
     private AppiumDriver driver;           // Para testes MOBILE
     private WebDriver webDriver;          // Para testes WEB
+    private RestApiClient apiClient;      // Para testes API
     private WaitUtils waitUtils;
     private TestResult currentTestResult;
     private Map<String, Object> contextData;
-    private String testType;              // "mobile" ou "web"
+    private String testType;              // "mobile", "web" ou "api"
 
     public TestContext() {
         this.contextData = new HashMap<>();
@@ -38,6 +40,15 @@ public class TestContext {
 
     public void setWebDriver(WebDriver webDriver) {
         this.webDriver = webDriver;
+    }
+
+    // ===== API METHODS =====
+    public RestApiClient getApiClient() {
+        return apiClient;
+    }
+
+    public void setApiClient(RestApiClient apiClient) {
+        this.apiClient = apiClient;
     }
 
     // ===== COMMON METHODS =====
@@ -89,6 +100,10 @@ public class TestContext {
         return "web".equalsIgnoreCase(testType);
     }
 
+    public boolean isApiTest() {
+        return "api".equalsIgnoreCase(testType);
+    }
+
     public void cleanUp() {
         if (driver != null) {
             try {
@@ -100,6 +115,13 @@ public class TestContext {
         if (webDriver != null) {
             try {
                 webDriver.quit();
+            } catch (Exception e) {
+                // Ignored
+            }
+        }
+        if (apiClient != null) {
+            try {
+                apiClient.reset();
             } catch (Exception e) {
                 // Ignored
             }
