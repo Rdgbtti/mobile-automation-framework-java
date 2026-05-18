@@ -1,6 +1,8 @@
-# Mobile Automation Framework - Java
+# 🚀 Mobile Automation Framework - Java
 
-Framework robusto e modular para automação de testes em aplicações móveis (Android e iOS) usando **Appium**, **Selenium** e **TestNG**.
+Um framework **Triple Hybrid** robusto e modular para automação de testes em aplicações **Mobile** (Android/iOS com Appium), **Web** (Chrome/Firefox com Selenium) e **APIs REST** usando TestNG, com integração JIRA, listeners automáticos e relatórios Allure.
+
+**Desenvolvido por:** [Rdgbtti](https://github.com/Rdgbtti/Rdgbtti)
 
 ## 📋 Índice
 
@@ -10,31 +12,80 @@ Framework robusto e modular para automação de testes em aplicações móveis (
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Configuração](#configuração)
 - [Uso](#uso)
+- [Exemplos de Uso](#exemplos-de-uso)
 - [Padrões e Melhores Práticas](#padrões-e-melhores-práticas)
 - [Relatórios](#relatórios)
 - [CI/CD](#cicd)
+- [Troubleshooting](#troubleshooting)
+- [Contribuindo](#contribuindo)
+- [Suporte](#suporte)
 
 ## ✨ Características
 
-- ✅ **Automação Mobile**: Suporte para Android e iOS via Appium
-- ✅ **Page Object Model**: Organização modular e reutilizável
-- ✅ **TestNG**: Framework de testes poderoso com data-driven capabilities
+- ✅ **Automação Mobile**: Android e iOS via Appium (Appium 9.1.0)
+- ✅ **Automação Web**: Chrome, Firefox, Edge, Safari via Selenium (4.20.0)
+- ✅ **REST API**: Testes de API com REST Assured (5.4.0)
+- ✅ **Page Object Model**: Organização modular e moderno
+- ✅ **TestNG**: Framework poderoso com @DataProvider (data-driven)
 - ✅ **Logging**: Log4j2 com níveis configuráveis
-- ✅ **Relatórios**: Allure Reports para visualização de resultados
-- ✅ **CI/CD**: GitHub Actions workflow pré-configurado
-- ✅ **Java 17**: Utilizando features modernas do Java
-- ✅ **Maven**: Gerenciamento de dependências e builds
+- ✅ **Relatórios**: Allure Reports com screenshots automáticos
+- ✅ **JIRA Integration**: Link testes com issues JIRA
+- ✅ **Listeners**: Retry automático, captura de falhas/sucesso/skipped
+- ✅ **Java 17**: Features modernas da linguagem
+- ✅ **Maven**: Dependências atualizadas e gerenciadas
 
 ## 📦 Requisitos
 
 - **Java 17** ou superior
 - **Maven 3.8** ou superior
-- **Android SDK** (para testes Android)
-- **Xcode** (para testes iOS)
+- **Node.js** (para Appium)
 - **Appium Server** (2.x ou superior)
-- **Node.js** (para executar Appium)
+- **Android SDK** (para testes mobile Android)
+- **Xcode** (para testes iOS em macOS)
+- **Navegadores**: Chrome, Firefox, Edge ou Safari (para testes web)
 
-### Instalar Appium
+---
+
+## 🏗️ Arquitetura Triple Hybrid
+
+Este é um framework **hybrid** que suporta 3 tipos de automação:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│         MOBILE AUTOMATION FRAMEWORK v3.0.0              │
+├─────────────────────────────────────────────────────────┤
+│                                                          │
+│  📱 MOBILE (Appium)    🌐 WEB (Selenium)    🔌 API (REST)  │
+│  ├─ Android            ├─ Chrome             ├─ GET      │
+│  ├─ iOS                ├─ Firefox            ├─ POST     │
+│  └─ Emuladores         ├─ Safari             ├─ PUT      │
+│                        └─ Edge               ├─ PATCH    │
+│                                              └─ DELETE   │
+│                                                          │
+│  Todos com: TestNG • Allure • JIRA • Listeners         │
+│                                                          │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Detecta automaticamente o tipo de teste em `config.properties`:
+
+```properties
+# Mobile
+test.type=mobile
+platform=android
+
+# Web
+test.type=web
+browser=chrome
+
+# API
+test.type=api
+api.base.url=http://localhost:8080
+```
+
+---
+
+### 🔧 Instalar Appium
 
 ```bash
 npm install -g appium
@@ -47,41 +98,35 @@ appium-doctor
 
 ## 🚀 Instalação
 
-### 1. Clone o projeto
+### 1️⃣ Clone o projeto Framework
 
 ```bash
-git clone https://github.com/seu-usuario/mobile-automation-framework-java.git
+git clone https://github.com/Rdgbtti/Rdgbtti.git
 cd mobile-automation-framework-java
 ```
 
-### 2. Instale as dependências
+### 2️⃣ Instale as dependências
 
 ```bash
 mvn clean install
 ```
 
-### 3. Configure o arquivo `config.properties`
+Isto vai baixar:
+- ✅ Appium 9.1.0 (Mobile)
+- ✅ Selenium 4.20.0 (Web)
+- ✅ REST Assured 5.4.0 (API)
+- ✅ TestNG 7.9.0 (Testes)
+- ✅ Allure 2.23.1 (Relatórios)
+- ✅ JIRA Client 8.26.0 (Integração)
 
-Edite `src/test/resources/config.properties` com seus dados:
+### 3️⃣ Verifique a instalação dos pré-requisitos
 
-```properties
-# Ambiente
-environment=local
-platform=Android
-
-# Configurações Android
-android.app.path=/caminho/para/app.apk
-android.device.udid=emulator-5554
-android.platform.version=14
-android.app.package=com.example.app
-android.app.activity=.MainActivity
-
-# Servidor Appium
-appium.server.url=http://127.0.0.1:4723
-
-# Timeouts
-implicit.wait=10
-explicit.wait=15
+```bash
+java -version          # Java 17+
+mvn -v                 # Maven 3.8+
+appium --version       # Appium 2.x+
+node --version         # Node.js
+appium-doctor          # Diagnóstico Appium
 ```
 
 ## 📁 Estrutura do Projeto
@@ -171,49 +216,118 @@ appium
 
 ## 💡 Uso
 
-### 1. Criar um novo Page Object
-
-```java
-public class HomePage extends BasePage {
-    private final By homeButton = By.xpath("//button[@text='Home']");
-    
-    public HomePage(AppiumDriver driver, WaitUtils waitUtils) {
-        super(driver, waitUtils);
-    }
-    
-    public void clickHomeButton() {
-        click(homeButton);
-    }
-}
-```
-
-### 2. Criar um novo Teste
-
-```java
-@Test
-public void testHomeNavigation() {
-    HomePage homePage = new HomePage(driver, waitUtils);
-    homePage.clickHomeButton();
-    Assert.assertTrue(homePage.isHomePageDisplayed());
-}
-```
-
-### 3. Executar testes
+### Executar testes
 
 ```bash
-# Todos os testes
+# Todos os testes (detecta tipo automaticamente)
 mvn clean test
+
+# Apenas testes móbile
+mvn clean test -Dtest=*Test -Dtest.type=mobile
+
+# Apenas testes web
+mvn clean test -Dtest=*Test -Dtest.type=web
+
+# Apenas testes API
+mvn clean test -Dtest=*Test -Dtest.type=api
 
 # Teste específico
 mvn clean test -Dtest=LoginTest
 
-# Com padrão específico
-mvn clean test -Dtest=*Test
-
-# Gerar Allure Report
-mvn clean test
-mvn allure:report
+# Gerar relatório Allure
+mvn allure:serve
 ```
+
+---
+
+## 📖 Exemplos de Uso
+
+### 📱 Teste Mobile (Appium)
+
+```java
+@Test
+public void testMobileLogin() {
+    LoginPage loginPage = new LoginPage(driver, waitUtils);
+    
+    loginPage.enterEmail("usuario@example.com");
+    loginPage.enterPassword("senha123");
+    loginPage.clickLogin();
+    
+    Assert.assertTrue(loginPage.isHomeScreenDisplayed());
+}
+```
+
+### 🌐 Teste Web (Selenium)
+
+```java
+@Test
+public void testWebLogin() {
+    driver.get("https://app.example.com");
+    LoginPage loginPage = new LoginPage(driver, waitUtils);
+    
+    loginPage.enterEmail("usuario@example.com");
+    loginPage.enterPassword("senha123");
+    loginPage.clickLogin();
+    
+    Assert.assertTrue(loginPage.isHomePageDisplayed());
+}
+```
+
+### 🔌 Teste API (REST Assured)
+
+```java
+@Test
+public void testApiCreateUser() {
+    RestApiClient apiClient = new RestApiClient(api.baseUrl);
+    
+    JsonObject payload = new JsonObject();
+    payload.addProperty("name", "João");
+    payload.addProperty("email", "joao@example.com");
+    
+    Response response = apiClient.post("/users", payload.toString());
+    
+    Assert.assertTrue(apiClient.isSuccessful());
+    Assert.assertTrue(apiClient.responseContains("id"));
+}
+```
+
+---
+
+## 🎯 Listeners TestNG e JIRA Integration
+
+### Listeners Automáticos
+
+O framework captura automaticamente:
+- ✅ **Sucessos**: Registra testes que passaram
+- ✅ **Falhas**: Captura screenshots e erros
+- ✅ **Skipped**: Identifica testes pulados
+- ✅ **Retry**: Retenta testes falhados automaticamente
+
+```java
+// Disponível automaticamente, sem config extra!
+@Test
+public void testLogin() {
+    // Se falhar:
+    // 1. Screenshot é capturado
+    // 2. Erro é registrado em log
+    // 3. Teste é retentado 1x
+    // 4. Resultado é enviado para JIRA
+}
+```
+
+### Integração JIRA
+
+Link seus testes com issues do JIRA:
+
+```java
+@Test
+@JiraIssue("PROJ-123")  // Link com issue JIRA
+public void testLoginFlow() {
+    // O resultado deste teste será enviado para PROJ-123
+}
+```
+
+---
 
 ## 📚 Padrões e Melhores Práticas
 
@@ -366,18 +480,21 @@ appium-doctor
 
 Distribuído sob a licença MIT. Veja LICENSE para mais informações.
 
-## 👥 Autores
+## 👥 Autor
 
-- **Seu Nome** - *Trabalho Inicial*
+- **Rdgbtti** - [GitHub](https://github.com/Rdgbtti/Rdgbtti)
 
-## 📞 Suporte
+## 📞 Suporte e Contato
 
-Para mais informações ou suporte:
-- 📧 Email: seu.email@example.com
-- 🐙 GitHub: https://github.com/seu-usuario
-- 📱 LinkedIn: https://linkedin.com/in/seu-perfil
+Para dúvidas, sugestões ou issues:
+- 🐙 **GitHub**: [Rdgbtti](https://github.com/Rdgbtti/Rdgbtti)
+
+## 📄 Licença
+
+Distribuído sob a licença MIT. Veja LICENSE para mais informações.
 
 ---
 
-**Última atualização**: Maio 2026
+**Última atualização**: Maio 2026  
+**Versão**: 3.0.0 - Triple Hybrid (Mobile + Web + API)
 
